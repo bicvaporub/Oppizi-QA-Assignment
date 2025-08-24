@@ -1,6 +1,6 @@
 # Oppizi QA Assignment
 
-This repository contains the deliverables for the QA Engineer (Automation & Manual) assignment for Oppizi, as specified in the provided document (QA_Assignment.pdf).
+This repository contains the deliverables for the QA assignment for Oppizi, as specified in the document: QA_Assignment.pdf.
 
 ## Structure
 - **Part1_Diagrams/**: Contains PNG images of sequence diagrams for the Campaign Creation and Agent Flyer Scan user journeys, illustrating integration points for system integration testing.
