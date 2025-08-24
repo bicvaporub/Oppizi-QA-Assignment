@@ -1,0 +1,128 @@
+{
+  "info": {
+    "name": "Open Charge Map API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /poi/",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/poi/?key={{apiKey}}&latitude=51.5074&longitude=-0.1278&distance=10&countrycode=GB&maxresults=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["poi/"],
+          "query": [
+            { "key": "key", "value": "{{apiKey}}" },
+            { "key": "latitude", "value": "51.5074" },
+            { "key": "longitude", "value": "-0.1278" },
+            { "key": "distance", "value": "10" },
+            { "key": "countrycode", "value": "GB" },
+            { "key": "maxresults", "value": "10" }
+          ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Response time is under 1000ms', function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+              "});",
+              "pm.test('Response schema is valid', function () {",
+              "    const schema = {",
+              "        'type': 'array',",
+              "        'items': {",
+              "            'type': 'object',",
+              "            'properties': {",
+              "                'ID': { 'type': 'number' },",
+              "                'AddressInfo': {",
+              "                    'type': 'object',",
+              "                    'properties': {",
+              "                        'Latitude': { 'type': 'number' },",
+              "                        'Longitude': { 'type': 'number' },",
+              "                        'Country': { 'type': 'object' }",
+              "                    },",
+              "                    'required': ['Latitude', 'Longitude']",
+              "                }",
+              "            },",
+              "            'required': ['ID', 'AddressInfo']",
+              "        }",
+              "    };",
+              "    pm.expect(pm.response.json()).to.be.jsonSchema(schema);",
+              "});",
+              "pm.test('Business logic: POIs within distance', function () {",
+              "    const response = pm.response.json();",
+              "    response.forEach(poi => {",
+              "        pm.expect(poi.AddressInfo.Latitude).to.be.a('number').and.to.be.closeTo(51.5074, 0.1);",
+              "        pm.expect(poi.AddressInfo.Longitude).to.be.a('number').and.to.be.closeTo(-0.1278, 0.1);",
+              "    });",
+              "});",
+              "pm.test('Business logic: Max results respected', function () {",
+              "    pm.expect(pm.response.json().length).to.be.at.most(10);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /referencedata/",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/referencedata/?key={{apiKey}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["referencedata/"],
+          "query": [{ "key": "key", "value": "{{apiKey}}" }]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Response time is under 1000ms', function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+              "});",
+              "pm.test('Response schema is valid', function () {",
+              "    const schema = {",
+              "        'type': 'object',",
+              "        'properties': {",
+              "            'ConnectionTypes': { 'type': 'array' },",
+              "            'Countries': { 'type': 'array' },",
+              "            'Operators': { 'type': 'array' }",
+              "        },",
+              "        'required': ['ConnectionTypes', 'Countries']",
+              "    };",
+              "    pm.expect(pm.response.json()).to.be.jsonSchema(schema);",
+              "});",
+              "pm.test('Business logic: Reference data contains expected types', function () {",
+              "    const response = pm.response.json();",
+              "    pm.expect(response.ConnectionTypes).to.be.an('array').that.is.not.empty;",
+              "    pm.expect(response.Countries).to.be.an('array').that.is.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.openchargemap.io/v3" },
+    { "key": "apiKey", "value": "YOUR_API_KEY" }
+  ]
+}
