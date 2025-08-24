@@ -11,7 +11,7 @@ This repository contains the deliverables for the QA assignment for Oppizi, as s
 - **Files**: 
   - `Campaign_Creation.png`: Sequence diagram for campaign creation, showing API validations and database storage.
   - `Agent_Flyer_Scan.png`: Sequence diagram for flyer scanning, highlighting geofencing and logging integrations.
-- **Details**: Diagrams focus on integration points (APIs, microservices, data services) for testing purposes.
+- **Details**: Diagrams focus on integration points for testing purposes.
 
 ## Part 2: API Testing
 - **Files**:
